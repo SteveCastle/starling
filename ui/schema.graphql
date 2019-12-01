@@ -11,6 +11,7 @@ interface Person {
 
 type User implements Item & Person {
   displayName: String!
+  slug: String @search(by: [hash])
   bio: String
   movementsOwned: [Movement] @hasInverse(field: owner)
   donationsMade: [FundRaisingDrive]
@@ -19,9 +20,10 @@ type User implements Item & Person {
 }
 
 type Movement implements Item {
-  title: String
-  slug: String
-  description: String
+  title: String @search(by: [term])
+  slug: String @search(by: [hash])
+  regionality: Regionality @search
+  description: String @search(by: [fulltext])
   tags: [Tag]
   owner: User! @hasInverse(field: movementsOwned)
   homePage: LandingPage
@@ -44,7 +46,7 @@ type Movement implements Item {
 
 type LandingPage implements Item {
   title: String
-  slug: String
+  slug: String @search(by: [hash])
   layout: Layout
 }
 
@@ -54,7 +56,7 @@ type Layout implements Item {
 
 type Election implements Item {
   title: String
-  slug: String
+  slug: String @search(by: [hash])
   date: DateTime!
   description: String
   electionType: ElectionType
@@ -76,13 +78,15 @@ type Issue implements Item {
 }
 
 type Company implements Item {
+  name: String!
+  slug: String! @search(by: [hash])
   boycotting: [Movement] @hasInverse(field: boycottingCompanies)
   supporting: [Movement] @hasInverse(field: supportingCompanies)
 }
 
 type Article implements Item {
   title: String!
-  slug: String!
+  slug: String! @search(by: [hash])
   preview: String!
   content: String!
   movements: [Movement] @hasInverse(field: articles)
@@ -90,7 +94,7 @@ type Article implements Item {
 
 type Event implements Item {
   title: String!
-  slug: String!
+  slug: String! @search(by: [hash])
   date: DateTime
   description: String!
   body: String!
@@ -109,7 +113,7 @@ type Opportunity implements Item {
 
 type Petition {
   title: String!
-  slug: String!
+  slug: String! @search(by: [hash])
   description: String
   body: String
   goal: Int
@@ -119,7 +123,7 @@ type Petition {
 
 type Poll implements Item {
   title: String!
-  slug: String!
+  slug: String! @search(by: [hash])
   respondants: [Respondant]
   questions: Question
   movements: [Movement] @hasInverse(field: polls)
@@ -149,7 +153,7 @@ type Tag implements Item {
 
 type FundRaisingDrive implements Item {
   title: String!
-  slug: String!
+  slug: String! @search(by: [hash])
   goalType: GoalType
   donations: [Donation] @hasInverse(field: fundRaisingDrive)
   movement: Movement! @hasInverse(field: fundRaisingDrives)
@@ -192,7 +196,7 @@ type Contact implements Item {
   assignedAgents: [Agent] @hasInverse(field: contacts)
 }
 
-enum Locality {
+enum Regionality {
   city
   state
   nation

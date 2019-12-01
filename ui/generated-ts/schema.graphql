@@ -1,0 +1,1945 @@
+directive @hasInverse(field: String!) on FIELD_DEFINITION
+
+directive @search(by: [DgraphIndex!]) on FIELD_DEFINITION
+
+type Activity implements Item {
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+  agent(filter: AgentFilter): Agent
+  user(filter: UserFilter): User
+  text: String
+}
+
+input ActivityFilter {
+  ids: [ID!]
+  not: ActivityFilter
+}
+
+input ActivityInput {
+  dateModified: DateTime
+  datePublished: DateTime
+  agent: AgentRef
+  user: UserRef
+  text: String
+}
+
+input ActivityOrder {
+  asc: ActivityOrderable
+  desc: ActivityOrderable
+  then: ActivityOrder
+}
+
+enum ActivityOrderable {
+  dateModified
+  datePublished
+  text
+}
+
+input ActivityRef {
+  id: ID!
+}
+
+type AddActivityPayload {
+  activity: Activity
+}
+
+type AddAgentPayload {
+  agent: Agent
+}
+
+type AddArticlePayload {
+  article: Article
+}
+
+type AddCandidatePayload {
+  candidate: Candidate
+}
+
+type AddCompanyPayload {
+  company: Company
+}
+
+type AddContactPayload {
+  contact: Contact
+}
+
+type AddDonationPayload {
+  donation: Donation
+}
+
+type AddElectionPayload {
+  election: Election
+}
+
+type AddEventPayload {
+  event: Event
+}
+
+type AddFundRaisingDrivePayload {
+  fundraisingdrive: FundRaisingDrive
+}
+
+type AddIssuePayload {
+  issue: Issue
+}
+
+type AddLandingPagePayload {
+  landingpage: LandingPage
+}
+
+type AddLayoutPayload {
+  layout: Layout
+}
+
+type AddMovementPayload {
+  movement: Movement
+}
+
+type AddNotePayload {
+  note: Note
+}
+
+type AddOpportunityPayload {
+  opportunity: Opportunity
+}
+
+type AddPetitionPayload {
+  petition: Petition
+}
+
+type AddPollPayload {
+  poll: Poll
+}
+
+type AddQuestionPayload {
+  question: Question
+}
+
+type AddRespondantPayload {
+  respondant: Respondant
+}
+
+type AddResponsePayload {
+  response: Response
+}
+
+type AddTagPayload {
+  tag: Tag
+}
+
+type AddUserPayload {
+  user: User
+}
+
+type Agent implements Item {
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+  user(filter: UserFilter): User
+  movement(filter: MovementFilter): Movement!
+  contacts(filter: ContactFilter, order: ContactOrder, first: Int, offset: Int): [Contact]
+  notes(filter: NoteFilter, order: NoteOrder, first: Int, offset: Int): [Note]
+  activities(filter: ActivityFilter, order: ActivityOrder, first: Int, offset: Int): [Activity]
+}
+
+input AgentFilter {
+  ids: [ID!]
+  not: AgentFilter
+}
+
+input AgentInput {
+  dateModified: DateTime
+  datePublished: DateTime
+  user: UserRef
+  movement: MovementRef!
+  contacts: [ContactRef]
+  notes: [NoteRef]
+  activities: [ActivityRef]
+}
+
+input AgentOrder {
+  asc: AgentOrderable
+  desc: AgentOrderable
+  then: AgentOrder
+}
+
+enum AgentOrderable {
+  dateModified
+  datePublished
+}
+
+input AgentRef {
+  id: ID!
+}
+
+type Article implements Item {
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String!
+  slug: String!
+  preview: String!
+  content: String!
+  movements(filter: MovementFilter, order: MovementOrder, first: Int, offset: Int): [Movement]
+}
+
+input ArticleFilter {
+  ids: [ID!]
+  slug: StringHashFilter
+  and: ArticleFilter
+  or: ArticleFilter
+  not: ArticleFilter
+}
+
+input ArticleInput {
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String!
+  slug: String!
+  preview: String!
+  content: String!
+  movements: [MovementRef]
+}
+
+input ArticleOrder {
+  asc: ArticleOrderable
+  desc: ArticleOrderable
+  then: ArticleOrder
+}
+
+enum ArticleOrderable {
+  dateModified
+  datePublished
+  title
+  slug
+  preview
+  content
+}
+
+input ArticleRef {
+  id: ID!
+}
+
+type Candidate implements Item & Person {
+  firstName: String
+  lastName: String
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+  elections(filter: ElectionFilter, order: ElectionOrder, first: Int, offset: Int): [Election]
+  platform: String
+  movements(filter: MovementFilter, order: MovementOrder, first: Int, offset: Int): [Movement]
+}
+
+input CandidateFilter {
+  ids: [ID!]
+  not: CandidateFilter
+}
+
+input CandidateInput {
+  firstName: String
+  lastName: String
+  dateModified: DateTime
+  datePublished: DateTime
+  elections: [ElectionRef]
+  platform: String
+  movements: [MovementRef]
+}
+
+input CandidateOrder {
+  asc: CandidateOrderable
+  desc: CandidateOrderable
+  then: CandidateOrder
+}
+
+enum CandidateOrderable {
+  firstName
+  lastName
+  dateModified
+  datePublished
+  platform
+}
+
+input CandidateRef {
+  id: ID!
+}
+
+type Company implements Item {
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+  name: String!
+  slug: String!
+  boycotting(filter: MovementFilter, order: MovementOrder, first: Int, offset: Int): [Movement]
+  supporting(filter: MovementFilter, order: MovementOrder, first: Int, offset: Int): [Movement]
+}
+
+input CompanyFilter {
+  ids: [ID!]
+  slug: StringHashFilter
+  and: CompanyFilter
+  or: CompanyFilter
+  not: CompanyFilter
+}
+
+input CompanyInput {
+  dateModified: DateTime
+  datePublished: DateTime
+  name: String!
+  slug: String!
+  boycotting: [MovementRef]
+  supporting: [MovementRef]
+}
+
+input CompanyOrder {
+  asc: CompanyOrderable
+  desc: CompanyOrderable
+  then: CompanyOrder
+}
+
+enum CompanyOrderable {
+  dateModified
+  datePublished
+  name
+  slug
+}
+
+input CompanyRef {
+  id: ID!
+}
+
+type Contact implements Item {
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+  user(filter: UserFilter): User
+  movement(filter: MovementFilter): Movement
+  phoneNumber: String
+  email: String
+  address: String
+  notes(filter: NoteFilter, order: NoteOrder, first: Int, offset: Int): [Note]
+  assignedAgents(filter: AgentFilter, order: AgentOrder, first: Int, offset: Int): [Agent]
+}
+
+input ContactFilter {
+  ids: [ID!]
+  not: ContactFilter
+}
+
+input ContactInput {
+  dateModified: DateTime
+  datePublished: DateTime
+  user: UserRef
+  movement: MovementRef
+  phoneNumber: String
+  email: String
+  address: String
+  notes: [NoteRef]
+  assignedAgents: [AgentRef]
+}
+
+input ContactOrder {
+  asc: ContactOrderable
+  desc: ContactOrderable
+  then: ContactOrder
+}
+
+enum ContactOrderable {
+  dateModified
+  datePublished
+  phoneNumber
+  email
+  address
+}
+
+input ContactRef {
+  id: ID!
+}
+
+scalar DateTime
+
+input DateTimeFilter {
+  eq: DateTime
+  le: DateTime
+  lt: DateTime
+  ge: DateTime
+  gt: DateTime
+}
+
+type DeleteActivityPayload {
+  msg: String
+}
+
+type DeleteAgentPayload {
+  msg: String
+}
+
+type DeleteArticlePayload {
+  msg: String
+}
+
+type DeleteCandidatePayload {
+  msg: String
+}
+
+type DeleteCompanyPayload {
+  msg: String
+}
+
+type DeleteContactPayload {
+  msg: String
+}
+
+type DeleteDonationPayload {
+  msg: String
+}
+
+type DeleteElectionPayload {
+  msg: String
+}
+
+type DeleteEventPayload {
+  msg: String
+}
+
+type DeleteFundRaisingDrivePayload {
+  msg: String
+}
+
+type DeleteIssuePayload {
+  msg: String
+}
+
+type DeleteItemPayload {
+  msg: String
+}
+
+type DeleteLandingPagePayload {
+  msg: String
+}
+
+type DeleteLayoutPayload {
+  msg: String
+}
+
+type DeleteMovementPayload {
+  msg: String
+}
+
+type DeleteNotePayload {
+  msg: String
+}
+
+type DeleteOpportunityPayload {
+  msg: String
+}
+
+type DeletePetitionPayload {
+  msg: String
+}
+
+type DeletePollPayload {
+  msg: String
+}
+
+type DeleteQuestionPayload {
+  msg: String
+}
+
+type DeleteRespondantPayload {
+  msg: String
+}
+
+type DeleteResponsePayload {
+  msg: String
+}
+
+type DeleteTagPayload {
+  msg: String
+}
+
+type DeleteUserPayload {
+  msg: String
+}
+
+enum DgraphIndex {
+  int
+  float
+  bool
+  hash
+  exact
+  term
+  fulltext
+  trigram
+  regexp
+  year
+  month
+  day
+  hour
+}
+
+type Donation implements Item {
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+  user(filter: UserFilter): User!
+  fundRaisingDrive(filter: FundRaisingDriveFilter): FundRaisingDrive!
+  amountDollars: Int
+  amountCents: Int
+}
+
+input DonationFilter {
+  ids: [ID!]
+  not: DonationFilter
+}
+
+input DonationInput {
+  dateModified: DateTime
+  datePublished: DateTime
+  user: UserRef!
+  fundRaisingDrive: FundRaisingDriveRef!
+  amountDollars: Int
+  amountCents: Int
+}
+
+input DonationOrder {
+  asc: DonationOrderable
+  desc: DonationOrderable
+  then: DonationOrder
+}
+
+enum DonationOrderable {
+  dateModified
+  datePublished
+  amountDollars
+  amountCents
+}
+
+input DonationRef {
+  id: ID!
+}
+
+type Election implements Item {
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String
+  slug: String
+  date: DateTime!
+  description: String
+  electionType: ElectionType
+  candidates(filter: CandidateFilter, order: CandidateOrder, first: Int, offset: Int): [Candidate]
+  issues(filter: IssueFilter, order: IssueOrder, first: Int, offset: Int): [Issue]
+}
+
+input ElectionFilter {
+  ids: [ID!]
+  slug: StringHashFilter
+  and: ElectionFilter
+  or: ElectionFilter
+  not: ElectionFilter
+}
+
+input ElectionInput {
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String
+  slug: String
+  date: DateTime!
+  description: String
+  electionType: ElectionType
+  candidates: [CandidateRef]
+  issues: [IssueRef]
+}
+
+input ElectionOrder {
+  asc: ElectionOrderable
+  desc: ElectionOrderable
+  then: ElectionOrder
+}
+
+enum ElectionOrderable {
+  dateModified
+  datePublished
+  title
+  slug
+  date
+  description
+}
+
+input ElectionRef {
+  id: ID!
+}
+
+enum ElectionType {
+  candidate
+  issue
+}
+
+type Event implements Item {
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String!
+  slug: String!
+  date: DateTime
+  description: String!
+  body: String!
+  movements(filter: MovementFilter, order: MovementOrder, first: Int, offset: Int): [Movement]
+}
+
+input EventFilter {
+  ids: [ID!]
+  slug: StringHashFilter
+  and: EventFilter
+  or: EventFilter
+  not: EventFilter
+}
+
+input EventInput {
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String!
+  slug: String!
+  date: DateTime
+  description: String!
+  body: String!
+  movements: [MovementRef]
+}
+
+input EventOrder {
+  asc: EventOrderable
+  desc: EventOrderable
+  then: EventOrder
+}
+
+enum EventOrderable {
+  dateModified
+  datePublished
+  title
+  slug
+  date
+  description
+  body
+}
+
+input EventRef {
+  id: ID!
+}
+
+input FloatFilter {
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+}
+
+type FundRaisingDrive implements Item {
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String!
+  slug: String!
+  goalType: GoalType
+  donations(filter: DonationFilter, order: DonationOrder, first: Int, offset: Int): [Donation]
+  movement(filter: MovementFilter): Movement!
+}
+
+input FundRaisingDriveFilter {
+  ids: [ID!]
+  slug: StringHashFilter
+  and: FundRaisingDriveFilter
+  or: FundRaisingDriveFilter
+  not: FundRaisingDriveFilter
+}
+
+input FundRaisingDriveInput {
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String!
+  slug: String!
+  goalType: GoalType
+  donations: [DonationRef]
+  movement: MovementRef!
+}
+
+input FundRaisingDriveOrder {
+  asc: FundRaisingDriveOrderable
+  desc: FundRaisingDriveOrderable
+  then: FundRaisingDriveOrder
+}
+
+enum FundRaisingDriveOrderable {
+  dateModified
+  datePublished
+  title
+  slug
+}
+
+input FundRaisingDriveRef {
+  id: ID!
+}
+
+enum GoalType {
+  lifetimeValue
+  recurringValue
+  numberOfDonors
+  perpetual
+}
+
+input IntFilter {
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+}
+
+type Issue implements Item {
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+  elections(filter: ElectionFilter, order: ElectionOrder, first: Int, offset: Int): [Election]
+  summary: String
+  content: String
+  movements(filter: MovementFilter, order: MovementOrder, first: Int, offset: Int): [Movement]
+}
+
+input IssueFilter {
+  ids: [ID!]
+  not: IssueFilter
+}
+
+input IssueInput {
+  dateModified: DateTime
+  datePublished: DateTime
+  elections: [ElectionRef]
+  summary: String
+  content: String
+  movements: [MovementRef]
+}
+
+input IssueOrder {
+  asc: IssueOrderable
+  desc: IssueOrderable
+  then: IssueOrder
+}
+
+enum IssueOrderable {
+  dateModified
+  datePublished
+  summary
+  content
+}
+
+input IssueRef {
+  id: ID!
+}
+
+interface Item {
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+}
+
+input ItemFilter {
+  ids: [ID!]
+  not: ItemFilter
+}
+
+input ItemOrder {
+  asc: ItemOrderable
+  desc: ItemOrderable
+  then: ItemOrder
+}
+
+enum ItemOrderable {
+  dateModified
+  datePublished
+}
+
+input ItemRef {
+  id: ID!
+}
+
+type LandingPage implements Item {
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String
+  slug: String
+  layout(filter: LayoutFilter): Layout
+}
+
+input LandingPageFilter {
+  ids: [ID!]
+  slug: StringHashFilter
+  and: LandingPageFilter
+  or: LandingPageFilter
+  not: LandingPageFilter
+}
+
+input LandingPageInput {
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String
+  slug: String
+  layout: LayoutRef
+}
+
+input LandingPageOrder {
+  asc: LandingPageOrderable
+  desc: LandingPageOrderable
+  then: LandingPageOrder
+}
+
+enum LandingPageOrderable {
+  dateModified
+  datePublished
+  title
+  slug
+}
+
+input LandingPageRef {
+  id: ID!
+}
+
+type Layout implements Item {
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+  landingPage(filter: LandingPageFilter, order: LandingPageOrder, first: Int, offset: Int): [LandingPage]
+}
+
+input LayoutFilter {
+  ids: [ID!]
+  not: LayoutFilter
+}
+
+input LayoutInput {
+  dateModified: DateTime
+  datePublished: DateTime
+  landingPage: [LandingPageRef]
+}
+
+input LayoutOrder {
+  asc: LayoutOrderable
+  desc: LayoutOrderable
+  then: LayoutOrder
+}
+
+enum LayoutOrderable {
+  dateModified
+  datePublished
+}
+
+input LayoutRef {
+  id: ID!
+}
+
+type Movement implements Item {
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String
+  slug: String
+  regionality: Regionality
+  description: String
+  tags(filter: TagFilter, order: TagOrder, first: Int, offset: Int): [Tag]
+  owner(filter: UserFilter): User!
+  homePage(filter: LandingPageFilter): LandingPage
+  landingPages(filter: LandingPageFilter, order: LandingPageOrder, first: Int, offset: Int): [LandingPage]
+  articles(filter: ArticleFilter, order: ArticleOrder, first: Int, offset: Int): [Article]
+  supportingCompanies(filter: CompanyFilter, order: CompanyOrder, first: Int, offset: Int): [Company]
+  boycottingCompanies(filter: CompanyFilter, order: CompanyOrder, first: Int, offset: Int): [Company]
+  candidates(filter: CandidateFilter, order: CandidateOrder, first: Int, offset: Int): [Candidate]
+  issues(filter: IssueFilter, order: IssueOrder, first: Int, offset: Int): [Issue]
+  supporters(filter: UserFilter, order: UserOrder, first: Int, offset: Int): [User]
+  friends(filter: MovementFilter, order: MovementOrder, first: Int, offset: Int): [Movement]
+  events(filter: EventFilter, order: EventOrder, first: Int, offset: Int): [Event]
+  opportunities(filter: OpportunityFilter, order: OpportunityOrder, first: Int, offset: Int): [Opportunity]
+  petitions(filter: PetitionFilter, order: PetitionOrder, first: Int, offset: Int): [Petition]
+  contacts(filter: ContactFilter, order: ContactOrder, first: Int, offset: Int): [Contact]
+  polls(filter: PollFilter, order: PollOrder, first: Int, offset: Int): [Poll]
+  fundRaisingDrives(filter: FundRaisingDriveFilter, order: FundRaisingDriveOrder, first: Int, offset: Int): [FundRaisingDrive]
+  agents(filter: AgentFilter, order: AgentOrder, first: Int, offset: Int): [Agent]
+}
+
+input MovementFilter {
+  ids: [ID!]
+  title: StringTermFilter
+  slug: StringHashFilter
+  regionality: Regionality
+  description: StringFullTextFilter
+  and: MovementFilter
+  or: MovementFilter
+  not: MovementFilter
+}
+
+input MovementInput {
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String
+  slug: String
+  regionality: Regionality
+  description: String
+  tags: [TagRef]
+  owner: UserRef!
+  homePage: LandingPageRef
+  landingPages: [LandingPageRef]
+  articles: [ArticleRef]
+  supportingCompanies: [CompanyRef]
+  boycottingCompanies: [CompanyRef]
+  candidates: [CandidateRef]
+  issues: [IssueRef]
+  supporters: [UserRef]
+  friends: [MovementRef]
+  events: [EventRef]
+  opportunities: [OpportunityRef]
+  contacts: [ContactRef]
+  polls: [PollRef]
+  fundRaisingDrives: [FundRaisingDriveRef]
+  agents: [AgentRef]
+}
+
+input MovementOrder {
+  asc: MovementOrderable
+  desc: MovementOrderable
+  then: MovementOrder
+}
+
+enum MovementOrderable {
+  dateModified
+  datePublished
+  title
+  slug
+  description
+}
+
+input MovementRef {
+  id: ID!
+}
+
+type Mutation {
+  updateItem(input: UpdateItemInput!): UpdateItemPayload
+  deleteItem(filter: ItemFilter!): DeleteItemPayload
+  addUser(input: UserInput!): AddUserPayload
+  updateUser(input: UpdateUserInput!): UpdateUserPayload
+  deleteUser(filter: UserFilter!): DeleteUserPayload
+  addMovement(input: MovementInput!): AddMovementPayload
+  updateMovement(input: UpdateMovementInput!): UpdateMovementPayload
+  deleteMovement(filter: MovementFilter!): DeleteMovementPayload
+  addLandingPage(input: LandingPageInput!): AddLandingPagePayload
+  updateLandingPage(input: UpdateLandingPageInput!): UpdateLandingPagePayload
+  deleteLandingPage(filter: LandingPageFilter!): DeleteLandingPagePayload
+  addLayout(input: LayoutInput!): AddLayoutPayload
+  updateLayout(input: UpdateLayoutInput!): UpdateLayoutPayload
+  deleteLayout(filter: LayoutFilter!): DeleteLayoutPayload
+  addElection(input: ElectionInput!): AddElectionPayload
+  updateElection(input: UpdateElectionInput!): UpdateElectionPayload
+  deleteElection(filter: ElectionFilter!): DeleteElectionPayload
+  addCandidate(input: CandidateInput!): AddCandidatePayload
+  updateCandidate(input: UpdateCandidateInput!): UpdateCandidatePayload
+  deleteCandidate(filter: CandidateFilter!): DeleteCandidatePayload
+  addIssue(input: IssueInput!): AddIssuePayload
+  updateIssue(input: UpdateIssueInput!): UpdateIssuePayload
+  deleteIssue(filter: IssueFilter!): DeleteIssuePayload
+  addCompany(input: CompanyInput!): AddCompanyPayload
+  updateCompany(input: UpdateCompanyInput!): UpdateCompanyPayload
+  deleteCompany(filter: CompanyFilter!): DeleteCompanyPayload
+  addArticle(input: ArticleInput!): AddArticlePayload
+  updateArticle(input: UpdateArticleInput!): UpdateArticlePayload
+  deleteArticle(filter: ArticleFilter!): DeleteArticlePayload
+  addEvent(input: EventInput!): AddEventPayload
+  updateEvent(input: UpdateEventInput!): UpdateEventPayload
+  deleteEvent(filter: EventFilter!): DeleteEventPayload
+  addOpportunity(input: OpportunityInput!): AddOpportunityPayload
+  updateOpportunity(input: UpdateOpportunityInput!): UpdateOpportunityPayload
+  deleteOpportunity(filter: OpportunityFilter!): DeleteOpportunityPayload
+  addPetition(input: PetitionInput!): AddPetitionPayload
+  updatePetition(input: UpdatePetitionInput!): UpdatePetitionPayload
+  deletePetition(filter: PetitionFilter!): DeletePetitionPayload
+  addPoll(input: PollInput!): AddPollPayload
+  updatePoll(input: UpdatePollInput!): UpdatePollPayload
+  deletePoll(filter: PollFilter!): DeletePollPayload
+  addRespondant(input: RespondantInput!): AddRespondantPayload
+  updateRespondant(input: UpdateRespondantInput!): UpdateRespondantPayload
+  deleteRespondant(filter: RespondantFilter!): DeleteRespondantPayload
+  addQuestion(input: QuestionInput!): AddQuestionPayload
+  updateQuestion(input: UpdateQuestionInput!): UpdateQuestionPayload
+  deleteQuestion(filter: QuestionFilter!): DeleteQuestionPayload
+  addResponse(input: ResponseInput!): AddResponsePayload
+  updateResponse(input: UpdateResponseInput!): UpdateResponsePayload
+  deleteResponse(filter: ResponseFilter!): DeleteResponsePayload
+  addTag(input: TagInput!): AddTagPayload
+  updateTag(input: UpdateTagInput!): UpdateTagPayload
+  deleteTag(filter: TagFilter!): DeleteTagPayload
+  addFundRaisingDrive(input: FundRaisingDriveInput!): AddFundRaisingDrivePayload
+  updateFundRaisingDrive(input: UpdateFundRaisingDriveInput!): UpdateFundRaisingDrivePayload
+  deleteFundRaisingDrive(filter: FundRaisingDriveFilter!): DeleteFundRaisingDrivePayload
+  addDonation(input: DonationInput!): AddDonationPayload
+  updateDonation(input: UpdateDonationInput!): UpdateDonationPayload
+  deleteDonation(filter: DonationFilter!): DeleteDonationPayload
+  addAgent(input: AgentInput!): AddAgentPayload
+  updateAgent(input: UpdateAgentInput!): UpdateAgentPayload
+  deleteAgent(filter: AgentFilter!): DeleteAgentPayload
+  addNote(input: NoteInput!): AddNotePayload
+  updateNote(input: UpdateNoteInput!): UpdateNotePayload
+  deleteNote(filter: NoteFilter!): DeleteNotePayload
+  addActivity(input: ActivityInput!): AddActivityPayload
+  updateActivity(input: UpdateActivityInput!): UpdateActivityPayload
+  deleteActivity(filter: ActivityFilter!): DeleteActivityPayload
+  addContact(input: ContactInput!): AddContactPayload
+  updateContact(input: UpdateContactInput!): UpdateContactPayload
+  deleteContact(filter: ContactFilter!): DeleteContactPayload
+}
+
+type Note implements Item {
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+  agent(filter: AgentFilter): Agent
+  contact(filter: ContactFilter): Contact
+  text: String
+}
+
+input NoteFilter {
+  ids: [ID!]
+  not: NoteFilter
+}
+
+input NoteInput {
+  dateModified: DateTime
+  datePublished: DateTime
+  agent: AgentRef
+  contact: ContactRef
+  text: String
+}
+
+input NoteOrder {
+  asc: NoteOrderable
+  desc: NoteOrderable
+  then: NoteOrder
+}
+
+enum NoteOrderable {
+  dateModified
+  datePublished
+  text
+}
+
+input NoteRef {
+  id: ID!
+}
+
+type Opportunity implements Item {
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String!
+  slug: String!
+  date: DateTime
+  description: String!
+  body: String!
+  movement(filter: MovementFilter): Movement!
+  volunteers(filter: UserFilter, order: UserOrder, first: Int, offset: Int): [User]
+}
+
+input OpportunityFilter {
+  ids: [ID!]
+  not: OpportunityFilter
+}
+
+input OpportunityInput {
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String!
+  slug: String!
+  date: DateTime
+  description: String!
+  body: String!
+  movement: MovementRef!
+  volunteers: [UserRef]
+}
+
+input OpportunityOrder {
+  asc: OpportunityOrderable
+  desc: OpportunityOrderable
+  then: OpportunityOrder
+}
+
+enum OpportunityOrderable {
+  dateModified
+  datePublished
+  title
+  slug
+  date
+  description
+  body
+}
+
+input OpportunityRef {
+  id: ID!
+}
+
+input PatchActivity {
+  dateModified: DateTime
+  datePublished: DateTime
+  agent: AgentRef
+  user: UserRef
+  text: String
+}
+
+input PatchAgent {
+  dateModified: DateTime
+  datePublished: DateTime
+  user: UserRef
+  movement: MovementRef
+  contacts: [ContactRef]
+  notes: [NoteRef]
+  activities: [ActivityRef]
+}
+
+input PatchArticle {
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String
+  slug: String
+  preview: String
+  content: String
+  movements: [MovementRef]
+}
+
+input PatchCandidate {
+  firstName: String
+  lastName: String
+  dateModified: DateTime
+  datePublished: DateTime
+  elections: [ElectionRef]
+  platform: String
+  movements: [MovementRef]
+}
+
+input PatchCompany {
+  dateModified: DateTime
+  datePublished: DateTime
+  name: String
+  slug: String
+  boycotting: [MovementRef]
+  supporting: [MovementRef]
+}
+
+input PatchContact {
+  dateModified: DateTime
+  datePublished: DateTime
+  user: UserRef
+  movement: MovementRef
+  phoneNumber: String
+  email: String
+  address: String
+  notes: [NoteRef]
+  assignedAgents: [AgentRef]
+}
+
+input PatchDonation {
+  dateModified: DateTime
+  datePublished: DateTime
+  user: UserRef
+  fundRaisingDrive: FundRaisingDriveRef
+  amountDollars: Int
+  amountCents: Int
+}
+
+input PatchElection {
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String
+  slug: String
+  date: DateTime
+  description: String
+  electionType: ElectionType
+  candidates: [CandidateRef]
+  issues: [IssueRef]
+}
+
+input PatchEvent {
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String
+  slug: String
+  date: DateTime
+  description: String
+  body: String
+  movements: [MovementRef]
+}
+
+input PatchFundRaisingDrive {
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String
+  slug: String
+  goalType: GoalType
+  donations: [DonationRef]
+  movement: MovementRef
+}
+
+input PatchIssue {
+  dateModified: DateTime
+  datePublished: DateTime
+  elections: [ElectionRef]
+  summary: String
+  content: String
+  movements: [MovementRef]
+}
+
+input PatchItem {
+  dateModified: DateTime
+  datePublished: DateTime
+}
+
+input PatchLandingPage {
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String
+  slug: String
+  layout: LayoutRef
+}
+
+input PatchLayout {
+  dateModified: DateTime
+  datePublished: DateTime
+  landingPage: [LandingPageRef]
+}
+
+input PatchMovement {
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String
+  slug: String
+  regionality: Regionality
+  description: String
+  tags: [TagRef]
+  owner: UserRef
+  homePage: LandingPageRef
+  landingPages: [LandingPageRef]
+  articles: [ArticleRef]
+  supportingCompanies: [CompanyRef]
+  boycottingCompanies: [CompanyRef]
+  candidates: [CandidateRef]
+  issues: [IssueRef]
+  supporters: [UserRef]
+  friends: [MovementRef]
+  events: [EventRef]
+  opportunities: [OpportunityRef]
+  contacts: [ContactRef]
+  polls: [PollRef]
+  fundRaisingDrives: [FundRaisingDriveRef]
+  agents: [AgentRef]
+}
+
+input PatchNote {
+  dateModified: DateTime
+  datePublished: DateTime
+  agent: AgentRef
+  contact: ContactRef
+  text: String
+}
+
+input PatchOpportunity {
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String
+  slug: String
+  date: DateTime
+  description: String
+  body: String
+  movement: MovementRef
+  volunteers: [UserRef]
+}
+
+input PatchPetition {
+  title: String
+  slug: String
+  description: String
+  body: String
+  goal: Int
+  signers: [UserRef]
+  movements: [MovementRef]
+}
+
+input PatchPoll {
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String
+  slug: String
+  respondants: [RespondantRef]
+  questions: QuestionRef
+  movements: [MovementRef]
+}
+
+input PatchQuestion {
+  dateModified: DateTime
+  datePublished: DateTime
+  question: String
+  choices: [String]
+}
+
+input PatchRespondant {
+  dateModified: DateTime
+  datePublished: DateTime
+  user: UserRef
+  responses: [ResponseRef]
+}
+
+input PatchResponse {
+  dateModified: DateTime
+  datePublished: DateTime
+  respondant: RespondantRef
+  question: QuestionRef
+  answer: String
+}
+
+input PatchTag {
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String
+  description: String
+  icon: String
+}
+
+input PatchUser {
+  firstName: String
+  lastName: String
+  dateModified: DateTime
+  datePublished: DateTime
+  displayName: String
+  slug: String
+  bio: String
+  movementsOwned: [MovementRef]
+  donationsMade: [FundRaisingDriveRef]
+  supporting: [MovementRef]
+  volunteeringAt: [OpportunityRef]
+}
+
+interface Person {
+  firstName: String
+  lastName: String
+}
+
+input PersonOrder {
+  asc: PersonOrderable
+  desc: PersonOrderable
+  then: PersonOrder
+}
+
+enum PersonOrderable {
+  firstName
+  lastName
+}
+
+type Petition {
+  title: String!
+  slug: String!
+  description: String
+  body: String
+  goal: Int
+  signers(filter: UserFilter, order: UserOrder, first: Int, offset: Int): [User]
+  movements(filter: MovementFilter, order: MovementOrder, first: Int, offset: Int): [Movement]
+}
+
+input PetitionFilter {
+  slug: StringHashFilter
+  and: PetitionFilter
+  or: PetitionFilter
+  not: PetitionFilter
+}
+
+input PetitionInput {
+  title: String!
+  slug: String!
+  description: String
+  body: String
+  goal: Int
+  signers: [UserRef]
+  movements: [MovementRef]
+}
+
+input PetitionOrder {
+  asc: PetitionOrderable
+  desc: PetitionOrderable
+  then: PetitionOrder
+}
+
+enum PetitionOrderable {
+  title
+  slug
+  description
+  body
+  goal
+}
+
+type Poll implements Item {
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String!
+  slug: String!
+  respondants(filter: RespondantFilter, order: RespondantOrder, first: Int, offset: Int): [Respondant]
+  questions(filter: QuestionFilter): Question
+  movements(filter: MovementFilter, order: MovementOrder, first: Int, offset: Int): [Movement]
+}
+
+input PollFilter {
+  ids: [ID!]
+  slug: StringHashFilter
+  and: PollFilter
+  or: PollFilter
+  not: PollFilter
+}
+
+input PollInput {
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String!
+  slug: String!
+  respondants: [RespondantRef]
+  questions: QuestionRef
+  movements: [MovementRef]
+}
+
+input PollOrder {
+  asc: PollOrderable
+  desc: PollOrderable
+  then: PollOrder
+}
+
+enum PollOrderable {
+  dateModified
+  datePublished
+  title
+  slug
+}
+
+input PollRef {
+  id: ID!
+}
+
+enum ProductType {
+  digital
+  physical
+  subscription
+}
+
+type Query {
+  getItem(id: ID!): Item
+  queryItem(filter: ItemFilter, order: ItemOrder, first: Int, offset: Int): [Item]
+  queryPerson(order: PersonOrder, first: Int, offset: Int): [Person]
+  getUser(id: ID!): User
+  queryUser(filter: UserFilter, order: UserOrder, first: Int, offset: Int): [User]
+  getMovement(id: ID!): Movement
+  queryMovement(filter: MovementFilter, order: MovementOrder, first: Int, offset: Int): [Movement]
+  getLandingPage(id: ID!): LandingPage
+  queryLandingPage(filter: LandingPageFilter, order: LandingPageOrder, first: Int, offset: Int): [LandingPage]
+  getLayout(id: ID!): Layout
+  queryLayout(filter: LayoutFilter, order: LayoutOrder, first: Int, offset: Int): [Layout]
+  getElection(id: ID!): Election
+  queryElection(filter: ElectionFilter, order: ElectionOrder, first: Int, offset: Int): [Election]
+  getCandidate(id: ID!): Candidate
+  queryCandidate(filter: CandidateFilter, order: CandidateOrder, first: Int, offset: Int): [Candidate]
+  getIssue(id: ID!): Issue
+  queryIssue(filter: IssueFilter, order: IssueOrder, first: Int, offset: Int): [Issue]
+  getCompany(id: ID!): Company
+  queryCompany(filter: CompanyFilter, order: CompanyOrder, first: Int, offset: Int): [Company]
+  getArticle(id: ID!): Article
+  queryArticle(filter: ArticleFilter, order: ArticleOrder, first: Int, offset: Int): [Article]
+  getEvent(id: ID!): Event
+  queryEvent(filter: EventFilter, order: EventOrder, first: Int, offset: Int): [Event]
+  getOpportunity(id: ID!): Opportunity
+  queryOpportunity(filter: OpportunityFilter, order: OpportunityOrder, first: Int, offset: Int): [Opportunity]
+  queryPetition(filter: PetitionFilter, order: PetitionOrder, first: Int, offset: Int): [Petition]
+  getPoll(id: ID!): Poll
+  queryPoll(filter: PollFilter, order: PollOrder, first: Int, offset: Int): [Poll]
+  getRespondant(id: ID!): Respondant
+  queryRespondant(filter: RespondantFilter, order: RespondantOrder, first: Int, offset: Int): [Respondant]
+  getQuestion(id: ID!): Question
+  queryQuestion(filter: QuestionFilter, order: QuestionOrder, first: Int, offset: Int): [Question]
+  getResponse(id: ID!): Response
+  queryResponse(filter: ResponseFilter, order: ResponseOrder, first: Int, offset: Int): [Response]
+  getTag(id: ID!): Tag
+  queryTag(filter: TagFilter, order: TagOrder, first: Int, offset: Int): [Tag]
+  getFundRaisingDrive(id: ID!): FundRaisingDrive
+  queryFundRaisingDrive(filter: FundRaisingDriveFilter, order: FundRaisingDriveOrder, first: Int, offset: Int): [FundRaisingDrive]
+  getDonation(id: ID!): Donation
+  queryDonation(filter: DonationFilter, order: DonationOrder, first: Int, offset: Int): [Donation]
+  getAgent(id: ID!): Agent
+  queryAgent(filter: AgentFilter, order: AgentOrder, first: Int, offset: Int): [Agent]
+  getNote(id: ID!): Note
+  queryNote(filter: NoteFilter, order: NoteOrder, first: Int, offset: Int): [Note]
+  getActivity(id: ID!): Activity
+  queryActivity(filter: ActivityFilter, order: ActivityOrder, first: Int, offset: Int): [Activity]
+  getContact(id: ID!): Contact
+  queryContact(filter: ContactFilter, order: ContactOrder, first: Int, offset: Int): [Contact]
+}
+
+type Question implements Item {
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+  question: String
+  choices: [String]
+}
+
+input QuestionFilter {
+  ids: [ID!]
+  not: QuestionFilter
+}
+
+input QuestionInput {
+  dateModified: DateTime
+  datePublished: DateTime
+  question: String
+  choices: [String]
+}
+
+input QuestionOrder {
+  asc: QuestionOrderable
+  desc: QuestionOrderable
+  then: QuestionOrder
+}
+
+enum QuestionOrderable {
+  dateModified
+  datePublished
+  question
+  choices
+}
+
+input QuestionRef {
+  id: ID!
+}
+
+enum Regionality {
+  city
+  state
+  nation
+  world
+}
+
+type Respondant implements Item {
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+  user(filter: UserFilter): User!
+  responses(filter: ResponseFilter, order: ResponseOrder, first: Int, offset: Int): [Response]
+}
+
+input RespondantFilter {
+  ids: [ID!]
+  not: RespondantFilter
+}
+
+input RespondantInput {
+  dateModified: DateTime
+  datePublished: DateTime
+  user: UserRef!
+  responses: [ResponseRef]
+}
+
+input RespondantOrder {
+  asc: RespondantOrderable
+  desc: RespondantOrderable
+  then: RespondantOrder
+}
+
+enum RespondantOrderable {
+  dateModified
+  datePublished
+}
+
+input RespondantRef {
+  id: ID!
+}
+
+type Response implements Item {
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+  respondant(filter: RespondantFilter): Respondant
+  question(filter: QuestionFilter): Question
+  answer: String
+}
+
+input ResponseFilter {
+  ids: [ID!]
+  not: ResponseFilter
+}
+
+input ResponseInput {
+  dateModified: DateTime
+  datePublished: DateTime
+  respondant: RespondantRef
+  question: QuestionRef
+  answer: String
+}
+
+input ResponseOrder {
+  asc: ResponseOrderable
+  desc: ResponseOrderable
+  then: ResponseOrder
+}
+
+enum ResponseOrderable {
+  dateModified
+  datePublished
+  answer
+}
+
+input ResponseRef {
+  id: ID!
+}
+
+input StringExactFilter {
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+}
+
+input StringFullTextFilter {
+  alloftext: String
+  anyoftext: String
+}
+
+input StringHashFilter {
+  eq: String
+}
+
+input StringRegExpFilter {
+  regexp: String
+}
+
+input StringTermFilter {
+  allofterms: String
+  anyofterms: String
+}
+
+type Tag implements Item {
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String
+  description: String
+  icon: String
+}
+
+input TagFilter {
+  ids: [ID!]
+  not: TagFilter
+}
+
+input TagInput {
+  dateModified: DateTime
+  datePublished: DateTime
+  title: String
+  description: String
+  icon: String
+}
+
+input TagOrder {
+  asc: TagOrderable
+  desc: TagOrderable
+  then: TagOrder
+}
+
+enum TagOrderable {
+  dateModified
+  datePublished
+  title
+  description
+  icon
+}
+
+input TagRef {
+  id: ID!
+}
+
+input UpdateActivityInput {
+  filter: ActivityFilter!
+  patch: PatchActivity!
+}
+
+type UpdateActivityPayload {
+  activity: [Activity]
+}
+
+input UpdateAgentInput {
+  filter: AgentFilter!
+  patch: PatchAgent!
+}
+
+type UpdateAgentPayload {
+  agent: [Agent]
+}
+
+input UpdateArticleInput {
+  filter: ArticleFilter!
+  patch: PatchArticle!
+}
+
+type UpdateArticlePayload {
+  article: [Article]
+}
+
+input UpdateCandidateInput {
+  filter: CandidateFilter!
+  patch: PatchCandidate!
+}
+
+type UpdateCandidatePayload {
+  candidate: [Candidate]
+}
+
+input UpdateCompanyInput {
+  filter: CompanyFilter!
+  patch: PatchCompany!
+}
+
+type UpdateCompanyPayload {
+  company: [Company]
+}
+
+input UpdateContactInput {
+  filter: ContactFilter!
+  patch: PatchContact!
+}
+
+type UpdateContactPayload {
+  contact: [Contact]
+}
+
+input UpdateDonationInput {
+  filter: DonationFilter!
+  patch: PatchDonation!
+}
+
+type UpdateDonationPayload {
+  donation: [Donation]
+}
+
+input UpdateElectionInput {
+  filter: ElectionFilter!
+  patch: PatchElection!
+}
+
+type UpdateElectionPayload {
+  election: [Election]
+}
+
+input UpdateEventInput {
+  filter: EventFilter!
+  patch: PatchEvent!
+}
+
+type UpdateEventPayload {
+  event: [Event]
+}
+
+input UpdateFundRaisingDriveInput {
+  filter: FundRaisingDriveFilter!
+  patch: PatchFundRaisingDrive!
+}
+
+type UpdateFundRaisingDrivePayload {
+  fundraisingdrive: [FundRaisingDrive]
+}
+
+input UpdateIssueInput {
+  filter: IssueFilter!
+  patch: PatchIssue!
+}
+
+type UpdateIssuePayload {
+  issue: [Issue]
+}
+
+input UpdateItemInput {
+  filter: ItemFilter!
+  patch: PatchItem!
+}
+
+type UpdateItemPayload {
+  item: [Item]
+}
+
+input UpdateLandingPageInput {
+  filter: LandingPageFilter!
+  patch: PatchLandingPage!
+}
+
+type UpdateLandingPagePayload {
+  landingpage: [LandingPage]
+}
+
+input UpdateLayoutInput {
+  filter: LayoutFilter!
+  patch: PatchLayout!
+}
+
+type UpdateLayoutPayload {
+  layout: [Layout]
+}
+
+input UpdateMovementInput {
+  filter: MovementFilter!
+  patch: PatchMovement!
+}
+
+type UpdateMovementPayload {
+  movement: [Movement]
+}
+
+input UpdateNoteInput {
+  filter: NoteFilter!
+  patch: PatchNote!
+}
+
+type UpdateNotePayload {
+  note: [Note]
+}
+
+input UpdateOpportunityInput {
+  filter: OpportunityFilter!
+  patch: PatchOpportunity!
+}
+
+type UpdateOpportunityPayload {
+  opportunity: [Opportunity]
+}
+
+input UpdatePetitionInput {
+  filter: PetitionFilter!
+  patch: PatchPetition!
+}
+
+type UpdatePetitionPayload {
+  petition: [Petition]
+}
+
+input UpdatePollInput {
+  filter: PollFilter!
+  patch: PatchPoll!
+}
+
+type UpdatePollPayload {
+  poll: [Poll]
+}
+
+input UpdateQuestionInput {
+  filter: QuestionFilter!
+  patch: PatchQuestion!
+}
+
+type UpdateQuestionPayload {
+  question: [Question]
+}
+
+input UpdateRespondantInput {
+  filter: RespondantFilter!
+  patch: PatchRespondant!
+}
+
+type UpdateRespondantPayload {
+  respondant: [Respondant]
+}
+
+input UpdateResponseInput {
+  filter: ResponseFilter!
+  patch: PatchResponse!
+}
+
+type UpdateResponsePayload {
+  response: [Response]
+}
+
+input UpdateTagInput {
+  filter: TagFilter!
+  patch: PatchTag!
+}
+
+type UpdateTagPayload {
+  tag: [Tag]
+}
+
+input UpdateUserInput {
+  filter: UserFilter!
+  patch: PatchUser!
+}
+
+type UpdateUserPayload {
+  user: [User]
+}
+
+type User implements Item & Person {
+  firstName: String
+  lastName: String
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+  displayName: String!
+  slug: String
+  bio: String
+  movementsOwned(filter: MovementFilter, order: MovementOrder, first: Int, offset: Int): [Movement]
+  donationsMade(filter: FundRaisingDriveFilter, order: FundRaisingDriveOrder, first: Int, offset: Int): [FundRaisingDrive]
+  supporting(filter: MovementFilter, order: MovementOrder, first: Int, offset: Int): [Movement]
+  volunteeringAt(filter: OpportunityFilter, order: OpportunityOrder, first: Int, offset: Int): [Opportunity]
+}
+
+input UserFilter {
+  ids: [ID!]
+  slug: StringHashFilter
+  and: UserFilter
+  or: UserFilter
+  not: UserFilter
+}
+
+input UserInput {
+  firstName: String
+  lastName: String
+  dateModified: DateTime
+  datePublished: DateTime
+  displayName: String!
+  slug: String
+  bio: String
+  movementsOwned: [MovementRef]
+  donationsMade: [FundRaisingDriveRef]
+  supporting: [MovementRef]
+  volunteeringAt: [OpportunityRef]
+}
+
+input UserOrder {
+  asc: UserOrderable
+  desc: UserOrderable
+  then: UserOrder
+}
+
+enum UserOrderable {
+  firstName
+  lastName
+  dateModified
+  datePublished
+  displayName
+  slug
+  bio
+}
+
+input UserRef {
+  id: ID!
+}
+
+schema{
+	query: Query,
+	mutation: Mutation
+}

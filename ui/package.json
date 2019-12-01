@@ -7,8 +7,8 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "inject-dgraph-schema": "schema=$(cat schema.graphql | tr '\n' ' ');jq -n --arg schema \"$schema\" '{ query: \"mutation addSchema($sch: String!) { addSchema(input: { schema: $sch }) { schema { schema } } }\", variables: { sch: $schema }}' | curl -X POST -H \"Content-Type: application/json\" http://localhost:9000/admin -d @-",
-    "generate-ts": "mkdir ./generated-ts && zeus http://localhost:9000/graphql ./generated-ts -g ./generated-ts"
+    "update-schema": "schema=$(cat schema.graphql | tr '\n' ' ');jq -n --arg schema \"$schema\" '{ query: \"mutation addSchema($sch: String!) { addSchema(input: { schema: $sch }) { schema { schema } } }\", variables: { sch: $schema }}' | curl -X POST -H \"Content-Type: application/json\" http://localhost:9000/admin -d @-",
+    "generate-ts": "rm -Rf ./generated-ts && mkdir ./generated-ts && zeus http://localhost:9000/graphql ./generated-ts -g ./generated-ts"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +21,7 @@
   "devDependencies": {
     "@types/node": "^12.12.14",
     "@types/react": "^16.9.13",
+    "eslint": "^6.7.2",
     "typescript": "^3.7.2"
   }
 }
