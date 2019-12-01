@@ -1,0 +1,12 @@
+version: "3"
+services:
+  dgraph:
+    image: "dgraph/standalone:graphql"
+    container_name: "dev_dgraph"
+    ports:
+      - "9000:9000"
+    volumes:
+      - starling_dgraph:/var/lib/dgraph/data
+volumes:
+  starling_dgraph:
+

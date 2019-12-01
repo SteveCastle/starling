@@ -1,0 +1,218 @@
+interface Item {
+  id: ID!
+  dateModified: DateTime
+  datePublished: DateTime
+}
+
+interface Person {
+  firstName: String
+  lastName: String
+}
+
+type User implements Item & Person {
+  displayName: String!
+  bio: String
+  movementsOwned: [Movement] @hasInverse(field: owner)
+  donationsMade: [FundRaisingDrive]
+  supporting: [Movement] @hasInverse(field: supporters)
+  volunteeringAt: [Opportunity] @hasInverse(field: volunteers)
+}
+
+type Movement implements Item {
+  title: String
+  slug: String
+  description: String
+  tags: [Tag]
+  owner: User! @hasInverse(field: movementsOwned)
+  homePage: LandingPage
+  landingPages: [LandingPage]
+  articles: [Article] @hasInverse(field: movements)
+  supportingCompanies: [Company] @hasInverse(field: supporting)
+  boycottingCompanies: [Company] @hasInverse(field: boycotting)
+  candidates: [Candidate] @hasInverse(field: movements)
+  issues: [Issue] @hasInverse(field: movements)
+  supporters: [User] @hasInverse(field: supporting)
+  friends: [Movement]
+  events: [Event] @hasInverse(field: movements)
+  opportunities: [Opportunity] @hasInverse(field: movement)
+  petitions: [Petition] @hasInverse(field: movements)
+  contacts: [Contact] @hasInverse(field: movement)
+  polls: [Poll] @hasInverse(field: movements)
+  fundRaisingDrives: [FundRaisingDrive] @hasInverse(field: movement)
+  agents: [Agent] @hasInverse(field: movement)
+}
+
+type LandingPage implements Item {
+  title: String
+  slug: String
+  layout: Layout
+}
+
+type Layout implements Item {
+  landingPage: [LandingPage]
+}
+
+type Election implements Item {
+  title: String
+  slug: String
+  date: DateTime!
+  description: String
+  electionType: ElectionType
+  candidates: [Candidate]
+  issues: [Issue]
+}
+
+type Candidate implements Item & Person {
+  elections: [Election]
+  platform: String
+  movements: [Movement] @hasInverse(field: candidates)
+}
+
+type Issue implements Item {
+  elections: [Election]
+  summary: String
+  content: String
+  movements: [Movement] @hasInverse(field: issues)
+}
+
+type Company implements Item {
+  boycotting: [Movement] @hasInverse(field: boycottingCompanies)
+  supporting: [Movement] @hasInverse(field: supportingCompanies)
+}
+
+type Article implements Item {
+  title: String!
+  slug: String!
+  preview: String!
+  content: String!
+  movements: [Movement] @hasInverse(field: articles)
+}
+
+type Event implements Item {
+  title: String!
+  slug: String!
+  date: DateTime
+  description: String!
+  body: String!
+  movements: [Movement] @hasInverse(field: events)
+}
+
+type Opportunity implements Item {
+  title: String!
+  slug: String!
+  date: DateTime
+  description: String!
+  body: String!
+  movement: Movement! @hasInverse(field: opportunities)
+  volunteers: [User] @hasInverse(field: volunteeringAt)
+}
+
+type Petition {
+  title: String!
+  slug: String!
+  description: String
+  body: String
+  goal: Int
+  signers: [User]
+  movements: [Movement] @hasInverse(field: petitions)
+}
+
+type Poll implements Item {
+  title: String!
+  slug: String!
+  respondants: [Respondant]
+  questions: Question
+  movements: [Movement] @hasInverse(field: polls)
+}
+
+type Respondant implements Item {
+  user: User!
+  responses: [Response]
+}
+
+type Question implements Item {
+  question: String
+  choices: [String]
+}
+
+type Response implements Item {
+  respondant: Respondant
+  question: Question
+  answer: String
+}
+
+type Tag implements Item {
+  title: String
+  description: String
+  icon: String
+}
+
+type FundRaisingDrive implements Item {
+  title: String!
+  slug: String!
+  goalType: GoalType
+  donations: [Donation] @hasInverse(field: fundRaisingDrive)
+  movement: Movement! @hasInverse(field: fundRaisingDrives)
+}
+
+type Donation implements Item {
+  user: User!
+  fundRaisingDrive: FundRaisingDrive! @hasInverse(field: donations)
+  amountDollars: Int
+  amountCents: Int
+}
+
+type Agent implements Item {
+  user: User
+  movement: Movement! @hasInverse(field: agents)
+  contacts: [Contact] @hasInverse(field: assignedAgents)
+  notes: [Note] @hasInverse(field: agent)
+  activities: [Activity] @hasInverse(field: agent)
+}
+
+type Note implements Item {
+  agent: Agent @hasInverse(field: notes)
+  contact: Contact @hasInverse(field: notes)
+  text: String
+}
+
+type Activity implements Item {
+  agent: Agent @hasInverse(field: activities)
+  user: User
+  text: String
+}
+
+type Contact implements Item {
+  user: User
+  movement: Movement @hasInverse(field: contacts)
+  phoneNumber: String
+  email: String
+  address: String
+  notes: [Note] @hasInverse(field: contact)
+  assignedAgents: [Agent] @hasInverse(field: contacts)
+}
+
+enum Locality {
+  city
+  state
+  nation
+  world
+}
+
+enum GoalType {
+  lifetimeValue
+  recurringValue
+  numberOfDonors
+  perpetual
+}
+
+enum ProductType {
+  digital
+  physical
+  subscription
+}
+
+enum ElectionType {
+  candidate
+  issue
+}
