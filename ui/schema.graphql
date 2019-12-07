@@ -23,6 +23,7 @@ type Movement implements Item {
   title: String @search(by: [term])
   slug: String @search(by: [hash])
   regionality: Regionality @search
+  location: Geo @search
   description: String @search(by: [fulltext])
   tags: [Tag]
   owner: User! @hasInverse(field: movementsOwned)

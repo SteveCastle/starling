@@ -1,12 +1,9 @@
 import { NextPage } from "next";
+import { withApollo } from "../lib/apollo";
+import Movements from "../components/Movements";
 
-const Home: NextPage<{ userAgent: string | undefined }> = ({ userAgent }) => (
-  <h1>Hello world! - user agent: {userAgent}</h1>
-);
-
-Home.getInitialProps = async ({ req }) => {
-  const userAgent = req ? req.headers["user-agent"] : navigator.userAgent;
-  return { userAgent };
+const Home: NextPage = () => {
+  return <Movements />;
 };
 
-export default Home;
+export default withApollo(Home);
