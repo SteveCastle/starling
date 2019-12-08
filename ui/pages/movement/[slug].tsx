@@ -1,12 +1,14 @@
 import { NextPage } from "next";
+import Movement from "../../components/Movement";
+import { withApollo } from "../../lib/apollo";
 
-const Movement: NextPage<{ slug: string | string[] }> = ({ slug }) => (
-  <h1>Hello Movement slug: {slug}</h1>
+const MovementPage: NextPage<{ slug: string | string[] }> = ({ slug }) => (
+  <Movement slug={slug} />
 );
 
-Movement.getInitialProps = async ({ query }) => {
+MovementPage.getInitialProps = async ({ query }) => {
   const { slug } = query;
   return { slug };
 };
 
-export default Movement;
+export default withApollo(MovementPage);

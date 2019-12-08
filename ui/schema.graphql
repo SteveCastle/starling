@@ -9,10 +9,24 @@ interface Person {
   lastName: String
 }
 
+type Image {
+  uri: String
+  width: Int
+  height: Int
+}
+
+type Coordinates {
+  lat: Float
+  lng: Float
+}
+
 type User implements Item & Person {
   displayName: String!
   slug: String @search(by: [hash])
   bio: String
+  following: [User] @hasInverse(field: followers)
+  followers: [User] @hasInverse(field: following)
+  profileImage: Image
   movementsOwned: [Movement] @hasInverse(field: owner)
   donationsMade: [FundRaisingDrive]
   supporting: [Movement] @hasInverse(field: supporters)
@@ -23,7 +37,8 @@ type Movement implements Item {
   title: String @search(by: [term])
   slug: String @search(by: [hash])
   regionality: Regionality @search
-  location: Geo @search
+  location: Coordinates
+  primaryImage: Image
   description: String @search(by: [fulltext])
   tags: [Tag]
   owner: User! @hasInverse(field: movementsOwned)
@@ -112,7 +127,7 @@ type Opportunity implements Item {
   volunteers: [User] @hasInverse(field: volunteeringAt)
 }
 
-type Petition {
+type Petition implements Item {
   title: String!
   slug: String! @search(by: [hash])
   description: String
@@ -198,6 +213,7 @@ type Contact implements Item {
 }
 
 enum Regionality {
+  community
   city
   state
   nation

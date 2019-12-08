@@ -1,4 +1,6 @@
 import React from "react";
+import Link from "next/link";
+
 import { useQuery } from "@apollo/react-hooks";
 import { NetworkStatus } from "apollo-client";
 import gql from "graphql-tag";
@@ -6,6 +8,7 @@ import gql from "graphql-tag";
 interface Movement {
   id: number;
   title: string;
+  slug: string;
 }
 
 interface MovementData {
@@ -17,6 +20,7 @@ export const ALL_MOVEMENTS_QUERY = gql`
     queryMovement {
       id
       title
+      slug
     }
   }
 `;
@@ -37,10 +41,16 @@ const Movements: React.FC = () => {
     return <div>Error</div>;
   }
   return (
-    <div>
+    <ul>
       {data &&
-        data.queryMovement.map(item => <p key={item.id}>{item.title}</p>)}
-    </div>
+        data.queryMovement.map(item => (
+          <li key={item.id}>
+            <Link href="/movement/[slug]" as={`/movement/${item.slug}`}>
+              <a>{item.title}</a>
+            </Link>
+          </li>
+        ))}
+    </ul>
   );
 };
 
