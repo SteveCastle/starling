@@ -7,8 +7,8 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "update-schema": "schema=$(cat schema.graphql | tr '\n' ' ');jq -n --arg schema \"$schema\" '{ query: \"mutation addSchema($sch: String!) { addSchema(input: { schema: $sch }) { schema { schema } } }\", variables: { sch: $schema }}' | curl -X POST -H \"Content-Type: application/json\" http://localhost:9000/admin -d @-",
-    "generate-ts": "rm -Rf ./generated-ts && mkdir ./generated-ts && zeus http://localhost:9000/graphql ./generated-ts -g ./generated-ts"
+    "update-schema": "curl -X POST localhost:8080/admin/schema -d @schema.graphql",
+    "generate-ts": "rm -Rf ./generated-ts && mkdir ./generated-ts && zeus http://localhost:8080/graphql ./generated-ts -g ./generated-ts"
   },
   "keywords": [],
   "author": "",
@@ -28,7 +28,7 @@
     "react-dom": "^16.12.0"
   },
   "devDependencies": {
-    "@types/node": "^12.12.14",
+    "@types/node": "^13.7.4",
     "@types/react": "^16.9.13",
     "eslint": "^6.7.2",
     "typescript": "^3.7.2"

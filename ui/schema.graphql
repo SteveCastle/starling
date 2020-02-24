@@ -22,7 +22,7 @@ type Coordinates {
 
 type User implements Item & Person {
   displayName: String!
-  slug: String @search(by: [hash])
+  slug: String! @search(by: [hash])
   bio: String
   following: [User] @hasInverse(field: followers)
   followers: [User] @hasInverse(field: following)
@@ -35,7 +35,7 @@ type User implements Item & Person {
 
 type Movement implements Item {
   title: String @search(by: [term])
-  slug: String @search(by: [hash])
+  slug: String! @search(by: [hash])
   regionality: Regionality @search
   location: Coordinates
   primaryImage: Image

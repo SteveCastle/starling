@@ -4,6 +4,14 @@ import Link from "next/link";
 import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 
+interface User {
+  id: number;
+  displayName: string;
+  firstName: string;
+  lastName: string;
+  slug: string;
+}
+
 interface Candidate {
   id: string;
   firstName: string;
@@ -49,6 +57,7 @@ interface Movement {
   id: number;
   title: string;
   slug: string;
+  owner: User;
   regionality: string;
   description: string;
   candidates: [Candidate];
@@ -76,6 +85,10 @@ export const ALL_MOVEMENTS_QUERY = gql`
       id
       title
       slug
+      owner {
+        displayName
+        slug
+      }
       regionality
       description
       issues {
